@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Calendar</title>
     <link href="index.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -14,6 +14,10 @@
             <div class="event-edit">
                 <button>Добавить</button>
                 <button>Обновить</button>
+                <form class="create-element-short-form hidden" action="">
+                    <input type="text" placeholder="5 марта, 14:00, День Рождения">
+                    <input type="submit" value="Создать">
+                </form>
             </div>
             <div class="search-panel-wrapper">
                 <img src="./images/Magnifier.svg" alt="Иконка лупы">
@@ -31,21 +35,17 @@
     </nav>
     <main class="main">
         <div></div>
+        <form class="create-element-form hidden" action="">
+            <input type="text" placeholder="Событие">
+            <input type="text" placeholder="День, месяц, год">
+            <input type="text" placeholder="Имена участников">
+            <textarea name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
+            <div class="create-submit-wrapper">
+                <input type="submit" value="Готово">
+                <input type="submit" value="Удалить">
+            </div>
+        </form>
     </main>
-    <form class="create-element-form hidden" action="">
-        <input type="text" placeholder="Событие">
-        <input type="text" placeholder="День, месяц, год">
-        <input type="text" placeholder="Имена участников">
-        <textarea name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
-        <div class="create-submit-wrapper">
-            <input type="submit" value="Готово">
-            <input type="submit" value="Удалить">
-        </div>
-    </form>
-    <form class="create-element-short-form hidden" action="">
-        <input type="text" placeholder="5 марта, 14:00, День Рождения">
-        <input type="submit" value="Создать">
-    </form>
     <script src="./index.js"></script>
 </body>
 </html>
