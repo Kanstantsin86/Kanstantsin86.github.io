@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calendar</title>
+    <link href="index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div>
+            <div class="event-edit">
+                <button>Добавить</button>
+                <button>Обновить</button>
+            </div>
+            <div class="search-panel-wrapper">
+                <img src="./images/Magnifier.svg" alt="Иконка лупы">
+                <input class="search-panel" type="text" placeholder="Событие, дата или участник">
+            </div>
+        </div>  
+    </header>
+    <nav class="nav">
+        <div class="date-mover">
+            <button class="date-mover-button">&#9668</button>
+            <p></p>
+            <button class="date-mover-button">&#9658</button>
+            <button class="today-button">Сегодня</button>
+        </div>
+    </nav>
+    <main class="main">
+        <div></div>
+    </main>
+    <form class="create-element-form hidden" action="">
+        <input type="text" placeholder="Событие">
+        <input type="text" placeholder="День, месяц, год">
+        <input type="text" placeholder="Имена участников">
+        <textarea name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
+        <div class="create-submit-wrapper">
+            <input type="submit" value="Готово">
+            <input type="submit" value="Удалить">
+        </div>
+    </form>
+    <form class="create-element-short-form hidden" action="">
+        <input type="text" placeholder="5 марта, 14:00, День Рождения">
+        <input type="submit" value="Создать">
+    </form>
+    <script src="./index.js"></script>
+</body>
+</html>
