@@ -14,14 +14,15 @@
             <div class="event-edit">
                 <button>Добавить</button>
                 <button>Обновить</button>
-                <form class="create-element-short-form hidden" action="">
-                    <input type="text" placeholder="5 марта, 14:00, День Рождения">
-                    <input type="submit" value="Создать">
-                </form>
             </div>
+            <form class="create-element-short-form hidden" action="">
+                <input type="text" placeholder="5 марта, 14:00, День Рождения">
+                <input type="submit" value="Создать">
+            </form>
             <div class="search-panel-wrapper">
                 <img src="./images/Magnifier.svg" alt="Иконка лупы">
                 <input class="search-panel" type="text" placeholder="Событие, дата или участник">
+                <div class="found-tasks-list-wrapper hidden"></div>
             </div>
         </div>  
     </header>
@@ -37,10 +38,22 @@
         <div></div>
         <form class="create-element-form hidden" action="">
             <input type="text" placeholder="Событие">
-            <input type="text" placeholder="День, месяц, год">
+            <input type="text" placeholder="День, месяц, год" readonly>
             <input type="text" placeholder="Имена участников">
+            <input type="hidden">
             <textarea name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
             <div class="create-submit-wrapper">
+                <input type="submit" value="Готово">
+                <input type="submit" value="Удалить">
+            </div>
+        </form>
+        <form class="edit-element-form hidden">
+            <h3 class="edit-element-header"></h3>
+            <p class="edit-element-date"></p>
+            <p class="edit-element-members-head">Участники:</p>
+            <p class="edit-element-members"></p>
+            <textarea class="edit-element-description" name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
+            <div class="edit-submit-wrapper">
                 <input type="submit" value="Готово">
                 <input type="submit" value="Удалить">
             </div>

@@ -30,6 +30,10 @@ input {
     padding: 5px;
 }
 
+li {
+    list-style-type: none;
+}
+
 p {
     color: black;
 }
@@ -56,38 +60,97 @@ th {
     padding: 5px;
 }
 
-.header {
+.active-add {
+    background-color: #e5f1f9;
+    border: 2px solid #86c9fd;
+}
+
+.create-element-form, 
+.create-element-short-form, 
+.edit-element-form {
+    height: auto;
+    width: 300px;
+    background-color: #f4f4f4;
     display: flex;
-    justify-content: center;
-    box-sizing: content-box;
-    padding: 50px 0px 20px;
-    background-color:#f4f4f4;
-    box-shadow: 0 8px 4px -4px rgba(209, 209, 209, .8);
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0px 0px 7px 2px rgba(128,128,128,0.6);
+    position: absolute;
+    z-index: 1;
 }
 
-.header > div {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
+.create-element-form:after, 
+.create-element-form:before, 
+.edit-element-form:after, 
+.edit-element-form:before  {
+    content: '';
+    position: absolute; 
+    left: 4px; 
+    top: 30px;
+    background: #f4f4f4;
+    margin-left: -11px;
+    width: 16px;
+    height: 16px;
+    box-shadow: -4px 4px 7px -3px rgba(0, 0, 0, 0.3);
+    z-index: -1;  
+    transform: rotate(45deg);
 }
 
-.nav {
-    display: flex;
-    justify-content: center;
+.create-element-short-form:after, 
+.create-element-short-form:before {
+    content: '';
+    position: absolute; 
+    left: 40px; 
+    top: -8px;
+    background: #f4f4f4;
+    margin-left: -11px;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0px 0px 2px -2px rgba(0, 0, 0, 0.3);
+    z-index: 0;  
+    transform: rotate(45deg);
 }
 
-.nav > div {
-    width: 90%;
+.create-element-form * ,
+.create-element-short-form * ,
+.edit-element-form * {
+    display: block;
+    width: auto;
+    margin-bottom: 5px 0 5px 0;
 }
 
-.main {
-    display: flex;
-    justify-content: center;
+.create-element-form > input,
+.create-element-short-form > input,
+.edit-element-form > input {
+    height: 25px;
+    border-radius: 5px;
+    color: black;
 }
 
-.main > div {
-    width: 90%;
-    overflow: auto;
+.create-element-short-form :last-child {
+    background-color: #ececec;
+    width: 35%;
+}
+
+.create-submit-wrapper, 
+.edit-submit-wrapper {
+    display: inline-flex;  
+    width: 126px; 
+    color: black;
+}
+
+.create-submit-wrapper > input, 
+.edit-submit-wrapper > input {
+    display: inline-block;  
+    width: 50%; 
+    color: black;
+    border-radius: 5px;
+    background-color: #ececec;
+}
+
+.create-submit-wrapper > input:active, 
+.edit-submit-wrapper > input:active {
+    background-color: #c1e4ff;
 }
 
 .date-mover * {
@@ -107,6 +170,106 @@ th {
     border-width: 1px;
 }
 
+.event-added {
+    background-color: #c2e4fe;
+}
+
+.event-edit > button {
+    text-shadow: 0 2px 2px #003561;
+    border-radius: 4px;
+    color: #f4f4f4;
+    height: 32px;
+    min-width: 96px;
+}
+
+.found-tasks-list-wrapper {
+    position: absolute;
+    width: 250px;
+    padding: 5px;
+    background-color: #ffffff;
+    color: #666666;
+    box-sizing: content-box;
+    box-shadow: 0px 0px 7px 2px rgba(128,128,128,0.6);
+    z-index: 0;
+}
+
+.found-tasks-list-wrapper:after, 
+.found-tasks-list-wrapper:before {
+    content: '';
+    position: absolute; 
+    left: 40px; 
+    top: -8px;
+    background: #ffffff;
+    margin-left: -11px;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0px 0px 2px -2px rgba(0, 0, 0, 0.3);
+    z-index: -1;  
+    transform: rotate(45deg);
+}
+
+.found-tasks-list div {
+    border-bottom: thin solid #666666;
+    padding: 5px;
+}
+
+.found-tasks-list div p {
+    margin: 0;
+    padding: 5px;
+}
+
+.found-tasks-list div .p-task {
+    font-weight: 700;
+}
+
+.found-tasks-list div:hover {
+    background-color: #27a1ff;
+    color: #ffffff;
+}
+
+.found-tasks-list :last-child {
+    border: none;
+    
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    box-sizing: content-box;
+    padding: 50px 0px 20px;
+    background-color:#f4f4f4;
+    box-shadow: 0 8px 4px -4px rgba(209, 209, 209, .8);
+}
+
+.header > div {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: none;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+}
+
+.main > div {
+    width: 90%;
+    overflow: auto;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+}
+
+.nav > div {
+    width: 90%;
+}
+
 .today-button { 
     background-color: #fff;
     border-style: solid;
@@ -120,69 +283,11 @@ th {
     background-color: #f4f4f4;
 }
 
-.create-element-form, .create-element-short-form {
-    height: auto;
-    width: 300px;
+.today-date {
+    color: #3d3d3d;
+    font-weight: bolder;
     background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: 0px 0px 7px 2px rgba(128,128,128,0.6);
-}
-
-/*.create-element-form::before, .create-element-short-form::before {
-    content: ''; 
-    position: absolute;
-    left: -20px; 
-    bottom: 87px;
-    border: 18px solid transparent;	
-    border-right: 10px solid #f4f4f4;
-   }*/
-
-.create-element-form * , .create-element-short-form * {
-    display: block;
-    width: auto;
-    margin-bottom: 5px;
-}
-
-.create-element-form > input, .create-element-short-form > input {
-    height: 25px;
-    border-radius: 3px;
-}
-
-.create-element-short-form :last-child {
-    background-color: #ececec;
-    width: 35%;
-}
-
-.create-submit-wrapper {
-    display: inline-flex;  
-    width: 126px; 
-    color: black;
-}
-
-.create-submit-wrapper > input {
-    display: inline-block;  
-    width: 50%; 
-    color: black;
-    border-radius: 3px;
-    background-color: #ececec;
-}
-
-.create-submit-wrapper > input:active {
-    background-color: #c1e4ff;
-}
-
-.hidden {
-    display: none;
-}
-
-.event-edit > button {
-    
-    border-radius: 4px;
-    color: #f4f4f4;
-    height: 32px;
-    min-width: 96px;
+    border: 2px solid #e7e7e7;
 }
 
 .search-panel-wrapper {
@@ -208,8 +313,4 @@ th {
     height: 18px;
     border-radius: 4px;
     font-size: 100%
-}
-
-.today-date {
-    background-color: #005ba6;
 }
