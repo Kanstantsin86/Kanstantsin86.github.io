@@ -436,6 +436,8 @@ searchPanel.addEventListener('input', () => {
     }
 });
 
+searchPanel.addEventListener('click', closeAndClearDivs);
+
 function resultsSearch(substring){
     let localStorageStringsArr = [];
 
