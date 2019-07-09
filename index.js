@@ -11,6 +11,7 @@ const date = document.querySelector('.date-mover > p'),
     dateMover = document.getElementsByClassName('date-mover')[0],
 
     createElementForm = document.getElementsByClassName('create-element-form')[0],
+    createFormCloseButton = createElementForm.getElementsByClassName('close-button')[0],
     createSubmitWrapper = document.getElementsByClassName('create-submit-wrapper')[0],
     doneInput = document.querySelectorAll('.create-submit-wrapper > input')[0],
     deleteInput = document.querySelectorAll('.create-submit-wrapper > input')[1],
@@ -18,21 +19,46 @@ const date = document.querySelector('.date-mover > p'),
     hiddenDateInput = createElementForm.getElementsByTagName('input')[3],
 
     createElementShortForm = document.getElementsByClassName('create-element-short-form')[0],
+    shortFormCloseButton = createElementShortForm.getElementsByClassName('close-button')[0],
     shortFormTextField = createElementShortForm.getElementsByTagName('input')[0],
     shortFormCreateInput = createElementShortForm.getElementsByTagName('input')[1],
 
     editElementForm = document.getElementsByClassName('edit-element-form')[0],
+    editFormCloseButton = editElementForm.getElementsByClassName('close-button')[0],
     editSubmitWrapper = document.getElementsByClassName('edit-submit-wrapper')[0],
     editFormIsReadyButton = editElementForm.querySelectorAll('.edit-submit-wrapper > input')[0],
     editFormDeleteButton = editElementForm.querySelectorAll('.edit-submit-wrapper > input')[1],
+    editFormTextArea = editElementForm.getElementsByTagName('textarea'),
+    editFormHiddenDate = editElementForm.getElementsByTagName('input')[0],
     
     foundTasksListWrapper = document.getElementsByClassName('found-tasks-list-wrapper')[0];
 
 // Создаем таблицу для отрисовки месяца
 let table = document.createElement('table');
 
-// Создаем функцию для преобразования даты
+// Создаем обработчики событий для кнопок закрывания форм
+createFormCloseButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeAndClearDivs()
+});
+shortFormCloseButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    createElementShortForm.classList.add('hidden');
+    shortFormTextField.value = null;
+});
+editFormCloseButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    editElementForm.classList.add('hidden');
+    editFormTextArea.value = null;
+});
 
+// Создаем обработчик события для кнопоки Обновить
+refreshButton.addEventListener('click', (e) => {
+    closeAndClearDivs();
+    createTable(mover.myDate);
+});
+
+// Создаем функцию для преобразования даты
 function returnMonthDay(numericDate){
     const date = new Date(null);
     date.setMilliseconds(numericDate);
@@ -80,35 +106,10 @@ function fillOutTheEditForm(tableCell){
         month: 'long', 
         day: 'numeric'
     });
+    editFormHiddenDate.value = +cellDate;
     editElementMembers.innerText = task.names;
-    editElementDescription.innerText = task.description;
-
-    editElementDescription.addEventListener('input', () => {
-        editFormIsReadyButton.classList.add('active');
-    });
-
-    editSubmitWrapper.addEventListener('click', (e) => {
-        e.preventDefault();
-        if ((e.target === editFormIsReadyButton)||(editFormIsReadyButton.classList.contains('active'))) {
-            localStorage.setItem(cellDate, 
-                `{
-                    "task": "${task.task}",
-                    "date": "${task.date}",
-                    "names": "${task.names}",
-                    "description": "${editElementDescription.value}"
-                }`
-            );
-            editFormIsReadyButton.classList.remove('active');
-            createTable(cellDate);
-        } else if (e.target === editFormDeleteButton) {
-            localStorage.removeItem(cellDate);
-            createTable(cellDate);
-        };
-        editElementForm.classList.toggle('hidden');
-    });
+    editElementDescription.value = task.description;
 }
-
-
 
 function getTdDate(tableCell){
     const date = new Date(null);
@@ -134,108 +135,152 @@ function createFormClear(){
         createElementForm.getElementsByTagName('input')[2].value = null;
         createElementForm.getElementsByTagName('textarea')[0].value = null;
         createElementForm.getElementsByTagName('input')[3].value = null;
-        editFormIsReadyButton.classList.remove('active');
+        let styleElem = document.head.appendChild(document.createElement('style'));
+        styleElem.innerHTML = ".create-element-form:after, .create-element-form:before, .edit-element-form:after,.edit-element-form:before { top: 30px; left: 4px; box-shadow: -4px 4px 7px -3px rgba(0, 0, 0, 0.3);}";
 }
 
 createSubmitWrapper.addEventListener('click', (e) => {
     e.preventDefault();
 
     if (e.target === doneInput) {
+
         const taskInputValue = createElementForm.getElementsByTagName('input')[0].value,
             namesInputValue = createElementForm.getElementsByTagName('input')[2].value,
             descriptionInputValue = createElementForm.getElementsByTagName('textarea')[0].value,
-            date = createElementForm.getElementsByTagName('input')[3].value,
-            tdDate = new Date(null);
-            tdDate.setMilliseconds(date);
-        if(taskInputValue.trim() === ""){
+            date = createElementForm.getElementsByTagName('input')[3].value;
+        let tdDate = new Date(null);
+        tdDate.setMilliseconds(date);
+
+        if (taskInputValue.trim() === "") {
             createFormClear();
             createElementForm.classList.toggle('hidden');
             return;
-        }else{
+        } else {
             localStorageItemSet(tdDate, descriptionInputValue, taskInputValue, namesInputValue);
             createFormClear();
-            editFormIsReadyButton.classList.remove('active');
+            createElementForm.classList.toggle('hidden');
             createTable(tdDate);
         }
+    } else if (e.target === deleteInput) {
+
+        e.preventDefault();
+        createFormClear();
+        closeAndClearDivs();
+        console.log('очистил форму');
+    } else {
+        console.log(`Обработчик события 'click' для этой цели не установлен`);
+        return;
     }
-    createElementForm.classList.toggle('hidden');
+});
+
+editSubmitWrapper.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    const cellDate = new Date(null);
+    cellDate.setMilliseconds(editFormHiddenDate.value);
+    const task = JSON.parse(localStorage.getItem(cellDate));
+
+    if (e.target === editFormIsReadyButton) {
+        localStorage.setItem(cellDate, 
+            `{
+                "task": "${task.task}",
+                "date": "${task.date}",
+                "names": "${task.names}",
+                "description": "${document.getElementsByClassName('edit-element-description')[0].value}"
+            }`
+        );
+        createTable(cellDate);
+
+    } else if (e.target === editFormDeleteButton) {
+        localStorage.removeItem(cellDate);
+        createTable(cellDate);
+    };
+
+    editElementForm.classList.toggle('hidden');
 });
 
 // Функция для позиционирования форм
 function positionAt(anchor, position, elem) {
     let anchorCoords = anchor.getBoundingClientRect();
+    let allWidth = document.documentElement.clientWidth - (anchorCoords.left + anchor.offsetWidth + 340 + 10);
+    let allHeight = document.documentElement.clientHeight - (anchorCoords.top + anchor.offsetHeight + 418 + 10);
 
     switch (position) {
-      /*case "top":
-        elem.style.left = anchorCoords.left + "px";
-        elem.style.top = anchorCoords.top - elem.offsetHeight + "px";
-        break;*/
-
-      case "right":
-        elem.style.left = anchorCoords.left + anchor.offsetWidth + 10 + "px";
-        elem.style.top = anchorCoords.top - 20 + "px";
+      case "around":
+        if (allWidth >= 0) {
+            if (allHeight >= 0) {
+                elem.style.left = anchorCoords.left + anchor.offsetWidth + 10 + "px";
+                elem.style.top = anchorCoords.top - 20 + "px";
+            } else {
+                elem.style.left = anchorCoords.left + anchor.offsetWidth + 10 + "px";
+                if (anchorCoords.bottom < (document.documentElement.clientHeight - anchor.offsetHeight * 2 + 10)) {
+                    elem.style.top = anchorCoords.top - 20 + "px"; 
+                } else {
+                    elem.style.bottom = document.documentElement.clientHeight - anchorCoords.bottom - 20  + "px";
+                    let styleElem = document.head.appendChild(document.createElement('style'));
+                    styleElem.innerHTML = ".create-element-form:after, .create-element-form:before, .edit-element-form:after,.edit-element-form:before { top: 370px;}";
+                }
+            }
+        } else {
+            let styleElem = document.head.appendChild(document.createElement('style'));
+            styleElem.innerHTML = ".create-element-form:after, .create-element-form:before, .edit-element-form:after,.edit-element-form:before { left: 342px; top: 30px; box-shadow: 4px -4px 7px -3px rgba(0, 0, 0, 0.3);}";
+            if (allHeight >= 0) {
+                elem.style.right = document.documentElement.clientWidth - anchorCoords.left + 10 + "px";
+                elem.style.top = anchorCoords.top - 20 + "px"; 
+            } else {
+                elem.style.right = document.documentElement.clientWidth - anchorCoords.left + 10 + "px";
+                if (anchorCoords.bottom < (document.documentElement.clientHeight - anchor.offsetHeight * 2 + 10)) {
+                    elem.style.top = anchorCoords.top - 20 + "px"; 
+                } else {
+                    elem.style.bottom = document.documentElement.clientHeight - anchorCoords.bottom - 20 + "px";
+                    let styleElem = document.head.appendChild(document.createElement('style'));
+                    styleElem.innerHTML = `.create-element-form:after, .create-element-form:before, .edit-element-form:after,.edit-element-form:before { top: 370px;}`;
+                }
+            }
+        }
         break;
 
         case "bottom":
             elem.style.left = anchorCoords.left + "px";
             elem.style.top = anchorCoords.top + anchor.offsetHeight + 16 + "px";
             break;
-
-      /*case "left":
-        elem.style.left = anchorCoords.right - anchor.offsetWidth - 10 + "px";
-        elem.style.top = anchorCoords.top + anchor.offsetHeight + "px";
-        break;*/
-
     }
 }
 
 // Выбираем, какое из форм открывать при клике на таблице
+
 calendarTable.addEventListener('click', (e) => {
+    let target = e.target;
     closeAndClearDivs();
-    if (e.target.tagName === "TD") {
+    while (target.tagName != 'TABLE') {
+        if (target.tagName == 'TD'){
+            createElementForm.style.cssText = `
+            z-index: 2;
+            position: absolute;
+            `;
+            positionAt(target, "around", createElementForm); 
 
-        createElementForm.style.cssText = `
-        z-index: 2;
-        position: absolute;
-        `;
-        positionAt(e.target, "right", createElementForm); 
+            editElementForm.style.cssText = `
+            z-index: 2;
+            position: absolute;
+            `;
+            positionAt(target, "around", editElementForm);
 
-        editElementForm.style.cssText = `
-        z-index: 2;
-        position: absolute;
-        `;
-        positionAt(e.target.parentElement, "right", editElementForm);
-
-        if (e.target.lastElementChild.classList.contains('hidden')) {
-            if (editElementForm.classList.contains('hidden')) {
-                fillOutTheCreateForm(e.target);
-                createElementForm.classList.toggle('hidden');              
-            }
-        } else {
-            if (createElementForm.classList.contains('hidden')) {
-                fillOutTheEditForm(e.target);
-                editElementForm.classList.toggle('hidden');
-            }
-        }
-
-    } else if (e.target.parentElement.tagName === "TD") {
-
-        if (e.target.parentElement.classList.contains('hidden')) {
-            if (editElementForm.classList.contains('hidden')) {
-                fillOutTheCreateForm(e.target.parentElement);
-                createElementForm.classList.toggle('hidden');
-            }
-        } else {
-            if(createElementForm.classList.contains('hidden')){
-                fillOutTheEditForm(e.target.parentElement);
-                editElementForm.classList.toggle('hidden');
-                positionAt(e.target.parentElement, "right", editElementForm);
+            if (target.lastElementChild.classList.contains('hidden')) {
+                if (editElementForm.classList.contains('hidden')) {
+                    fillOutTheCreateForm(target);
+                    createElementForm.classList.toggle('hidden');              
+                }
+            } else {
+                if (createElementForm.classList.contains('hidden')) {
+                    fillOutTheEditForm(target);
+                    editElementForm.classList.toggle('hidden');
+                }
             }
         }
-    } else {
-        return;
-    }
-});
+        target = target.parentNode;
+    };
+})
 
 // Cоздаем обработчики событий для кнопок листания месяцев
 dateMover.addEventListener('click', moveMonth);
@@ -290,7 +335,7 @@ function createTable(myDate) {
         function getTask(taskDate) {
             if (localStorage.getItem(taskDate) !== null) {
                 const taskInfo = JSON.parse(localStorage.getItem(taskDate));
-                return `<p>${taskInfo.task} ${taskInfo.names} ${taskInfo.description}</p>`;
+                return `<p><span class="tdTaskHeader">${taskInfo.task}</span><br>${taskInfo.names}<br>${taskInfo.description}</p>`;
             } else {
                 return "";
             }
@@ -390,7 +435,6 @@ createElementShortForm.addEventListener('click', (e) => {
 
 shortFormCreateInput.addEventListener('click', (e) => {
     e.preventDefault();
-    //closeAndClearDivs();
     let [dateInfo, ...taskDescriptionArray] = shortFormTextField.value.split(', ', 3);
     const months = ["января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -422,6 +466,10 @@ shortFormCreateInput.addEventListener('click', (e) => {
             createElementShortForm.classList.add('hidden');
         }
     }
+    
+    const myDate = new Date(null);
+    myDate.setMilliseconds(+shortFormDate(dateInfo));
+    createTable(myDate);
 });
 
 searchPanel.addEventListener('input', () => {
@@ -429,9 +477,9 @@ searchPanel.addEventListener('input', () => {
     foundTasksListWrapper.classList.remove('hidden');
     foundTasksListWrapper.innerHTML = "";
     resultsSearch(substringForSearching);
-    positionAt(searchPanel, "bottom", foundTasksListWrapper); 
+    positionAt(searchPanel, "bottom", foundTasksListWrapper);
 
-    if (searchPanel.value === "") {
+    if ((searchPanel.value === "")||(foundTasksListWrapper.firstChild.children.length < 1)) {
         foundTasksListWrapper.classList.add('hidden');
     }
 });

@@ -16,8 +16,13 @@
                 <button>Обновить</button>
             </div>
             <form class="create-element-short-form hidden" action="">
+                <div class="close-button-wrapper">
+                    <button class="close-button"><img src="./images/Close-icon.svg" alt="Кнопка Закрыть окно формы"></button>
+                </div>
                 <input type="text" placeholder="5 марта, 14:00, День Рождения">
-                <input type="submit" value="Создать">
+                <div class="short-form-submit-wrapper">
+                    <input type="submit" value="Создать">
+                </div>
             </form>
             <div class="search-panel-wrapper">
                 <img src="./images/Magnifier.svg" alt="Иконка лупы">
@@ -37,6 +42,9 @@
     <main class="main">
         <div></div>
         <form class="create-element-form hidden" action="">
+            <div class="close-button-wrapper">
+                <button class="close-button"><img src="./images/Close-icon.svg" alt="Кнопка Закрыть окно формы"></button>
+            </div>
             <input type="text" placeholder="Событие">
             <input type="text" placeholder="День, месяц, год" readonly>
             <input type="text" placeholder="Имена участников">
@@ -48,10 +56,14 @@
             </div>
         </form>
         <form class="edit-element-form hidden">
+            <div class="close-button-wrapper">
+                <button class="close-button"><img src="./images/Close-icon.svg" alt="Кнопка Закрыть окно формы"></button>
+            </div>
             <h3 class="edit-element-header"></h3>
             <p class="edit-element-date"></p>
             <p class="edit-element-members-head">Участники:</p>
             <p class="edit-element-members"></p>
+            <input type="hidden">
             <textarea class="edit-element-description" name="" id="" cols="30" rows="10" placeholder="Описание"></textarea>
             <div class="edit-submit-wrapper">
                 <input type="submit" value="Готово">
